@@ -1,24 +1,30 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 
 class UserNavigation extends React.Component {
   state = {
-    showMenu: false
+    showMenu: false,
+    logout: false
   };
 
   showMenu = () => this.setState({ showMenu: true });
   hideMenu = () => this.setState({ showMenu: false });
 
   logout = () => {
-    this.props.logout();
-    this.props.history.push("/");
+    this.setState({ logout: true });
   };
 
   render() {
-    const { showMenu } = this.state;
+    const { showMenu, logout } = this.state;
+    console.log(logout);
+
+    if (logout === true) {
+      this.props.logout();
+      return <Redirect to="/my_profile" />;
+    }
 
     return (
       <div className="navbar">
@@ -88,7 +94,4 @@ UserNavigation.propTypes = {
   logout: PropTypes.func
 };
 
-export default connect(
-  null,
-  { logout }
-)(UserNavigation);
+export default connect(null, { logout })(UserNavigation);

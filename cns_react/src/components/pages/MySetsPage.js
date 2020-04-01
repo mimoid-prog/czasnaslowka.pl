@@ -1,8 +1,7 @@
 import React from "react";
-import UserNavigation from "../navigations/UserNavigation";
+import MainLayout from "../layouts/MainLayout";
 import UserSetsEdit from "../elements/UserSetsEdit";
 import SetEdition from "../elements/SetEdition";
-import Footer from "../elements/Footer";
 import Loading from "../utils/Loading";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -142,10 +141,8 @@ class MySetsPage extends React.Component {
     const { loading, set, mySetsMessage } = this.state;
 
     return (
-      <div>
-        {mySetsMessage.show && <div className="layer" />}
+      <MainLayout>
         <div className="my-sets-page">
-          <UserNavigation history={this.props.history} />
           {loading ? (
             <div className="my-sets-main">
               <Loading />
@@ -172,7 +169,6 @@ class MySetsPage extends React.Component {
               />
             </div>
           )}
-          <Footer />
         </div>
 
         {mySetsMessage.show && (
@@ -193,7 +189,7 @@ class MySetsPage extends React.Component {
             </button>
           </div>
         )}
-      </div>
+      </MainLayout>
     );
   }
 }

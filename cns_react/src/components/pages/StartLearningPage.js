@@ -1,7 +1,5 @@
 import React from "react";
-import UserNavigation from "../navigations/UserNavigation";
-import GuestNavigation from "../navigations/GuestNavigation";
-import Footer from "../elements/Footer";
+import MainLayout from "../layouts/MainLayout";
 import QueryString from "query-string";
 import { fetchUserSet, fetchGuestSet } from "../../actions/sets";
 import { connect } from "react-redux";
@@ -208,12 +206,7 @@ class StartLearningPage extends React.Component {
     const { foreignWords, polishWords } = this.state.set;
 
     return (
-      <div className="start-learning-page">
-        {isAuthenticated ? (
-          <UserNavigation history={this.props.history} />
-        ) : (
-          <GuestNavigation />
-        )}
+      <MainLayout>
         <div className="start-learning-main">
           {loading ? (
             <Loading />
@@ -333,8 +326,7 @@ class StartLearningPage extends React.Component {
             </div>
           )}
         </div>
-        <Footer />
-      </div>
+      </MainLayout>
     );
   }
 }
@@ -345,7 +337,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { fetchUserSet, fetchGuestSet }
-)(StartLearningPage);
+export default connect(mapStateToProps, { fetchUserSet, fetchGuestSet })(
+  StartLearningPage
+);

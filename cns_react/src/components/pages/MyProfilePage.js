@@ -1,6 +1,5 @@
 import React from "react";
-import UserNavigation from "../navigations/UserNavigation";
-import Footer from "../elements/Footer";
+import MainLayout from "../layouts/MainLayout";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FaUser } from "react-icons/fa";
@@ -21,8 +20,7 @@ class MyProfilePage extends React.Component {
 
   render() {
     return (
-      <div className="my-profile-page">
-        <UserNavigation history={this.props.history} />
+      <MainLayout>
         <div className="my-profile-main">
           <div className="container">
             <div className="my-account-section">
@@ -56,8 +54,7 @@ class MyProfilePage extends React.Component {
             </div>
           </div>
         </div>
-        <Footer />
-      </div>
+      </MainLayout>
     );
   }
 }
@@ -74,7 +71,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { resetPasswordRequest }
-)(MyProfilePage);
+export default connect(mapStateToProps, { resetPasswordRequest })(
+  MyProfilePage
+);

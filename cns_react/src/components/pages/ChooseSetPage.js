@@ -1,7 +1,5 @@
 import React from "react";
-import UserNavigation from "../navigations/UserNavigation";
-import GuestNavigation from "../navigations/GuestNavigation";
-import Footer from "../elements/Footer";
+import MainLayout from "../layouts/MainLayout";
 import { Switch, Route } from "react-router-dom";
 import CollectionOfSets from "../elements/CollectionOfSets";
 import ChooseCategory from "../elements/ChooseCategory";
@@ -19,12 +17,7 @@ class ChooseSetPage extends React.Component {
   render() {
     const { isAuthenticated } = this.props;
     return (
-      <div className="choose-set-page">
-        {isAuthenticated ? (
-          <UserNavigation history={this.props.history} />
-        ) : (
-          <GuestNavigation />
-        )}
+      <MainLayout>
         <div className="choose-set-main">
           <div className="container">
             <Switch>
@@ -47,8 +40,7 @@ class ChooseSetPage extends React.Component {
             </Switch>
           </div>
         </div>
-        <Footer />
-      </div>
+      </MainLayout>
     );
   }
 }
