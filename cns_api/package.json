@@ -1,0 +1,26 @@
+{
+  "name": "cns_api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.7.11",
+    "mongoose-unique-validator": "^2.0.3",
+    "nodemon": "^1.19.4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "xml2js": "^0.4.22"
+  },
+  "devDependencies": {
+    "nodemailer": "^6.3.1"
+  }
+}
