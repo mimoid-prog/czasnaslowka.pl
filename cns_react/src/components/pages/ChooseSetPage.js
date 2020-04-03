@@ -15,7 +15,6 @@ class ChooseSetPage extends React.Component {
   };
 
   render() {
-    const { isAuthenticated } = this.props;
     return (
       <MainLayout>
         <div className="choose-set-main">

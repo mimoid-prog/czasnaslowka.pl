@@ -399,10 +399,6 @@ select option {
   position: relative;
 }
 
-.my-sets-main {
-  background-color: var(--light-background-color);
-}
-
 .my-sets-main .user-sets-section {
   background-color: white;
   padding: 40px 0 60px;
@@ -842,31 +838,7 @@ select option {
 /*START-LEARNING-----------------*/
 .start-learning-main {
   text-align: center;
-}
-
-.learning-section {
-  padding-top: 40px;
-}
-
-.learning-container {
-  padding-bottom: 60px;
-}
-.statistics-section {
-  background-color: var(--light-background-color);
-}
-.learning-box {
-  padding-bottom: 40px;
-}
-
-.start-learning-banner {
-  background-color: var(--pink-color);
-  border-radius: 10px 10px 0 0;
-  width: 65%;
-  color: #fff;
-  padding: 8px 0;
-  text-align: center;
-  margin: 0 auto;
-  font-size: 16px;
+  padding: 40px 0 30px;
 }
 
 .word-banner1 {
@@ -927,7 +899,7 @@ select option {
 }
 
 .answers-section {
-  margin-bottom: 30px;
+  margin-top: 40px;
 }
 
 .answer-input {
@@ -952,20 +924,35 @@ select option {
 .answers-box p:last-of-type {
   border-bottom: 0;
 }
+
 .correct-answer {
   background-color: #97db97;
 }
+
 .wrong-answer {
   background-color: #ff7d7d;
 }
+
 .default {
   background-color: #fff;
 }
-.statistics-section {
-  padding: 40px 0 60px;
-}
+
 .statistics-text {
   margin-bottom: 20px;
+}
+
+.stats-enter {
+  opacity: 0;
+}
+.stats-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+.stats-exit {
+  opacity: 0;
+}
+.stats-exit-active {
+  opacity: 0;
 }
 
 .timer {
@@ -978,7 +965,7 @@ select option {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 15px auto 30px;
+  margin: 25px auto 30px;
 }
 
 .timer p {
@@ -1012,7 +999,7 @@ select option {
 }
 
 @media (min-width: 600px) {
-  .learning-container {
+  .start-learning-box {
     width: 450px;
     margin: 0 auto;
   }
@@ -1021,59 +1008,27 @@ select option {
   .wo-btn-2 {
     width: 150px;
   }
+
   .word-banner3 {
     padding: 30px 25px;
   }
 }
 
 @media (min-width: 1000px) {
-  .learning-section {
-    padding-top: 70px;
+  .start-learning-main {
+    padding: 70px 0;
   }
-  .learning-box {
-    padding-bottom: 60px;
-  }
-  .learning-container {
-    padding-bottom: 80px;
-  }
-  .statistics-section {
-    padding-bottom: 80px;
-  }
-}
 
-@media (min-width: 1200px) {
-  .learning-container {
+  .start-learning-box {
     width: 500px;
   }
-  .answers-section {
-    width: 500px;
-  }
+
   .word-banner3 {
     padding: 35px 25px;
   }
-}
 
-@media (min-width: 1300px) {
-  .learning-section {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 90px;
-  }
-
-  .learning-container {
-    width: auto;
-    margin: 0;
-    padding: 0;
-  }
-
-  .statistics-section {
-    width: 400px;
-    margin-left: 80px;
-    padding: 40px 50px 80px;
-  }
-
-  .statistics-section p {
-    font-size: 20px;
+  .answers-section {
+    margin-top: 60px;
   }
 }
 
