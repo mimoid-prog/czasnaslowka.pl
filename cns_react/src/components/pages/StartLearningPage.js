@@ -4,9 +4,9 @@ import QueryString from "query-string";
 import { fetchUserSet, fetchGuestSet } from "../../actions/sets";
 import { connect } from "react-redux";
 import { Scrollbars } from "react-custom-scrollbars";
-import Chart from "react-google-charts";
 import { IoMdRefresh } from "react-icons/io";
 import Loading from "../utils/Loading";
+import { Pie } from "react-chartjs-2";
 
 class StartLearningPage extends React.Component {
   constructor(props) {
@@ -16,6 +16,8 @@ class StartLearningPage extends React.Component {
       set: {},
       method: "",
       loading: true,
+      learningEnded: false,
+      chartData: {},
       stats: {
         correct: 0,
         answers: ["-", "-", "-", "-", "-", "-"],
@@ -50,17 +52,6 @@ class StartLearningPage extends React.Component {
           }),
         1000
       );
-    }
-
-    if (this.state.set.foreignWords.length === 1) {
-      clearInterval(this.timer);
-      if (window.innerWidth < 1300) {
-        setTimeout(() => {
-          document.getElementById("statistics").scrollIntoView({
-            behavior: "smooth"
-          });
-        }, 800);
-      }
     }
 
     if (this.state.set.foreignWords.length > 0) {
@@ -99,21 +90,40 @@ class StartLearningPage extends React.Component {
       }
 
       const newAnswersIndex = stats.answersIndex + 1;
+      const newCorrect =
+        val === "correct-answer"
+          ? this.state.stats.correct + 1
+          : this.state.stats.correct;
+
+      var chartData;
+      console.log(stats);
+      if (this.state.set.foreignWords.length === 1) {
+        clearInterval(this.timer);
+        chartData = {
+          labels: ["Poprawne", "Niepoprawne"],
+          datasets: [
+            {
+              data: [newCorrect, newAnswersIndex - newCorrect],
+              backgroundColor: ["#4ba851", "#db3f3f"],
+              hoverBackgroundColor: ["#49b350", "#eb3b3b"]
+            }
+          ]
+        };
+      }
 
       this.setState({
+        learningEnded: this.state.set.foreignWords.length === 1 ? true : false,
         set: {
           foreignWords: newForeignWords,
           polishWords: newPolishWords
         },
+        chartData,
         stats: {
           ...this.state.stats,
           answers: newAnswers,
           answersIndex: newAnswersIndex,
           styleOfAnswers: newStyleOfAnswers,
-          correct:
-            val === "correct-answer"
-              ? this.state.stats.correct + 1
-              : this.state.stats.correct,
+          correct: newCorrect,
           userAnswer: ""
         }
       });
@@ -143,6 +153,7 @@ class StartLearningPage extends React.Component {
       set: this.state.originalSet,
       method: this.state.method,
       loading: false,
+      learningEnded: false,
       stats: {
         correct: 0,
         wrong: 0,
@@ -164,7 +175,7 @@ class StartLearningPage extends React.Component {
 
   componentDidMount() {
     const data = QueryString.parse(this.props.location.search);
-    if (data.public == "yes") {
+    if (data.public === "yes") {
       this.props.fetchGuestSet(data.id).then(set => {
         this.shuffleArray(set.foreignWords, set.polishWords);
 
@@ -201,8 +212,7 @@ class StartLearningPage extends React.Component {
   }
 
   render() {
-    const { isAuthenticated } = this.props;
-    const { method, stats, loading } = this.state;
+    const { method, stats, loading, learningEnded, chartData } = this.state;
     const { foreignWords, polishWords } = this.state.set;
 
     return (
@@ -211,58 +221,77 @@ class StartLearningPage extends React.Component {
           {loading ? (
             <Loading />
           ) : (
-            <div className="learning-section">
-              <div className="s-container learning-container">
-                <div className="learning-box">
-                  <h3 className="tertiary-title">
-                    Pozostałe słówka: {foreignWords.length}
-                  </h3>
+            <div className="s-container">
+              <div className="start-learning-box">
+                {learningEnded === false ? (
+                  <div className="learning-section">
+                    <h3 className="tertiary-title">
+                      Pozostałe słówka: {foreignWords.length}
+                    </h3>
 
-                  {method === "with" ? (
-                    <div className="with-box">
-                      <div className="word-banner1">
-                        <p>{polishWords[0] ? polishWords[0] : "-"}</p>
+                    {method === "with" ? (
+                      <div className="with-box">
+                        <div className="word-banner1">
+                          <p>{polishWords[0] ? polishWords[0] : "-"}</p>
+                        </div>
+                        <div className="word-banner2">
+                          <input
+                            className="pure-btn answer-input"
+                            value={stats.userAnswer}
+                            onChange={this.handleChange}
+                            onKeyPress={this.checkKey}
+                          />
+                        </div>
+                        <button
+                          className="no-border-btn pure-btn ess-btn blue-btn"
+                          onClick={this.checkAnswer}
+                        >
+                          sprawdź
+                        </button>
                       </div>
-                      <div className="word-banner2">
-                        <input
-                          className="pure-btn answer-input"
-                          value={stats.userAnswer}
-                          onChange={this.handleChange}
-                          onKeyPress={this.checkKey}
-                        />
+                    ) : (
+                      <div className="without-box">
+                        <div className="word-banner3">
+                          <p>{foreignWords[0] ? foreignWords[0] : "-"}</p>
+                        </div>
+                        <button
+                          className="no-border-btn pure-btn wo-btn"
+                          onClick={() => this.checkAnswer("correct-answer")}
+                        >
+                          znam
+                        </button>
+                        <button
+                          className="no-border-btn pure-btn wo-btn-2"
+                          onClick={() => this.checkAnswer("wrong-answer")}
+                        >
+                          nie znam
+                        </button>
                       </div>
-                      <button
-                        className="no-border-btn pure-btn ess-btn blue-btn"
-                        onClick={this.checkAnswer}
-                      >
-                        sprawdź
-                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="statistics-section">
+                    <h2 className="tertiary-title">Wyniki</h2>
+                    <div className="statistics-box">
+                      <Pie data={chartData} />
+                      <div className="timer">
+                        <p className="seconds">{stats.time} sek</p>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="without-box">
-                      <div className="word-banner3">
-                        <p>{foreignWords[0] ? foreignWords[0] : "-"}</p>
+
+                    <div className="again-btn" onClick={this.resetState}>
+                      <div>
+                        <IoMdRefresh className="icon" />
+                        <p>Zacznij ponownie</p>
                       </div>
-                      <button
-                        className="no-border-btn pure-btn wo-btn"
-                        onClick={() => this.checkAnswer("correct-answer")}
-                      >
-                        znam
-                      </button>
-                      <button
-                        className="no-border-btn pure-btn wo-btn-2"
-                        onClick={() => this.checkAnswer("wrong-answer")}
-                      >
-                        nie znam
-                      </button>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 <div className="answers-section">
                   <h3 className="tertiary-title">Odpowiedzi:</h3>
                   <div className="answers-box">
-                    <Scrollbars style={{ height: 252 }} ref="scrollbar">
+                    <Scrollbars style={{ height: 264 }} ref="scrollbar">
                       {stats.answers.map((item, i) => (
                         <p key={i} className={stats.styleOfAnswers[i]}>
                           {stats.answers[i]}
@@ -270,57 +299,6 @@ class StartLearningPage extends React.Component {
                       ))}
                     </Scrollbars>
                   </div>
-                </div>
-              </div>
-
-              <div id="statistics" className="statistics-section">
-                <div className="s-container">
-                  <h2 className="secondary-title">Wyniki</h2>
-                  {foreignWords.length === 0 ? (
-                    <React.Fragment>
-                      <Chart
-                        height={"280px"}
-                        chartType="PieChart"
-                        loader={<div>Loading Chart</div>}
-                        data={[
-                          ["Task", "Hours per Day"],
-                          ["Poprawne", stats.correct],
-                          ["Niepoprawne", stats.answersIndex - stats.correct]
-                        ]}
-                        options={{
-                          colors: ["#4ba851", "#db3f3f"],
-                          backgroundColor: "transparent",
-                          chartArea: {
-                            width: "100%",
-                            height: "70%"
-                          },
-                          legend: {
-                            position: "top",
-                            alignment: "center",
-                            textStyle: { fontSize: 14 }
-                          },
-                          pieSliceTextStyle: { fontSize: 16 }
-                        }}
-                        rootProps={{ "data-testid": "1" }}
-                      />
-                      <div className="timer">
-                        <p className="seconds">{stats.time} sek</p>
-                      </div>
-                      <div className="again-btn" onClick={this.resetState}>
-                        <div>
-                          <IoMdRefresh className="icon" />
-                          <p>Zacznij ponownie</p>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <p className="statistics-text">
-                        Ukończ rozwiązywanie zestawu, a pojawi się w tym miejscu
-                        twój wynik.
-                      </p>
-                    </React.Fragment>
-                  )}
                 </div>
               </div>
             </div>

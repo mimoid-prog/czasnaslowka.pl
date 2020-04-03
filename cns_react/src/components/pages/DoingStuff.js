@@ -20,7 +20,7 @@ class DoingStuff extends React.Component {
     const { rank, setsToFetch } = this.state;
     return (
       <div>
-        {rank == "mode" ? (
+        {rank === "mode" ? (
           <div className="doing-stuff">
             <UserNavigation history={this.props.history} />
             <div className="container">

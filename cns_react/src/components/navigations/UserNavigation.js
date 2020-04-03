@@ -19,7 +19,6 @@ class UserNavigation extends React.Component {
 
   render() {
     const { showMenu, logout } = this.state;
-    console.log(logout);
 
     if (logout === true) {
       this.props.logout();
