@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
-
-const from = '"CzasNaSlowka" <info@czasnaslowka.com>';
+const getEmail = require("./emailTemplate");
+const from = '"CzasNaSlowka.pl" <kontakt@czasnaslowka.pl>';
 
 function setup() {
   return nodemailer.createTransport({
@@ -8,38 +8,44 @@ function setup() {
     port: process.env.EMAIL_PORT,
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
+      pass: process.env.EMAIL_PASS,
+    },
   });
 }
 
 module.exports = {
-  sendConfirmationEmail: function(user) {
+  sendConfirmationEmail: function (user) {
     const tranport = setup();
+    const htmlEmail = getEmail({
+      text: "Wciśnij przycisk, aby aktywować swoje konto.",
+      btnHref: user.generateConfirmationUrl(),
+      btnText: "Aktywuj konto",
+    });
+
     const email = {
       from,
       to: user.email,
-      subject: "Witamy w CzasNaSlowka",
-      text: `
-            Wciśnij przycisk, aby aktywować swoje konto.
-            <a href="${user.generateConfirmationUrl()}">Aktywuj konto</a>
-            `
+      subject: "Witaj w CzasNaSlowka.pl",
+      html: htmlEmail,
     };
 
     tranport.sendMail(email);
   },
-  sendResetPasswordEmail: function(user) {
+  sendResetPasswordEmail: function (user) {
     const tranport = setup();
+    const htmlEmail = getEmail({
+      text: "Wciśnij przycisk, aby zmienić swoje hasło.",
+      btnHref: user.generateResetPasswordLink(),
+      btnText: "Zmień hasło",
+    });
+
     const email = {
       from,
       to: user.email,
       subject: "Zmiana hasła - CzasNaSlowka.pl",
-      text: `
-            Wciśnij przycisk, aby zmienić swoje hasło.
-            <a href="${user.generateResetPasswordLink()}">Zmień hasło</a>
-            `
+      html: htmlEmail,
     };
 
     tranport.sendMail(email);
-  }
+  },
 };
