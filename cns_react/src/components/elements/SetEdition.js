@@ -39,8 +39,16 @@ class SetEdition extends React.Component {
     return [f, p];
   };
 
+  onKeyPress = e => {
+    console.log(e);
+    if (e.which === 13) e.preventDefault();
+  };
+
   onSubmit = e => {
     e.preventDefault();
+    console.log(e);
+    if (e.keyCode === 13) return false;
+
     this.setState({ loading: true });
     const { originalData, data } = this.state;
     const filtered1 = data.foreignWords.filter(value => value !== "");
@@ -215,7 +223,7 @@ class SetEdition extends React.Component {
     return (
       <div className="set-edition-section">
         <div className="s-container">
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.onSubmit} onKeyPress={this.onKeyPress}>
             <h2 className="secondary-title set-edition-title">
               {data.id ? "Edytowanie zestawu" : "Utwórz nowy zestaw"}
             </h2>
@@ -254,8 +262,12 @@ class SetEdition extends React.Component {
                     required
                   >
                     <option value="english">angielski</option>
-                    <option value="german">niemiecki</option>
                     <option value="french">francuski</option>
+                    <option value="spanish">hiszpański</option>
+                    <option value="german">niemiecki</option>
+                    <option value="swedish">szwedzki</option>
+                    <option value="russian">rosyjski</option>
+                    <option value="italian">włoski</option>
                   </select>
                 </div>
               </li>

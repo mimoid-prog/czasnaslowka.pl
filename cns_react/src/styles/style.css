@@ -1406,6 +1406,7 @@ select option {
   margin: 20px auto 0;
 }
 
+/* MAIN----------- */
 .home-main {
   background: #f0f0f0;
   padding: 100px 0;
@@ -1413,33 +1414,111 @@ select option {
 
 .home-main-box {
   display: flex;
-  flex-direction: column;
+}
+
+.home-text {
+  width: 45%;
 }
 
 .grid-box {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(7, 4vw);
+  width: 55%;
+  margin-left: 50px;
+}
+
+.grid-box img {
+  display: block;
+  height: 100%;
   width: 100%;
-  margin-top: 30px;
+  object-fit: cover;
+  box-shadow: 4px 4px 20px rgba(40, 40, 40, 0.1),
+    -4px -4px 20px rgba(40, 40, 40, 0.1);
 }
 
 .img1 {
-  display: block;
-  width: 50%;
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 5;
   grid-row-start: 1;
-  grid-row-end: 3;
+  grid-row-end: 6;
 }
 
 .img2 {
-  display: block;
-  width: 50%;
-  grid-column-start: 2;
-  grid-column-end: 4;
+  grid-column-start: 3;
+  grid-column-end: 7;
+  grid-row-start: 3;
+  grid-row-end: 8;
+}
+
+.img3 {
+  grid-column-start: 6;
+  grid-column-end: 10;
   grid-row-start: 2;
-  grid-row-end: 4;
+  grid-row-end: 7;
+  z-index: 100;
+}
+
+@media (max-width: 1200px) {
+  .home-text {
+    width: 55%;
+  }
+
+  .grid-box {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 6vw);
+    width: 45%;
+  }
+
+  .img1 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 5;
+  }
+
+  .img2 {
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 6;
+  }
+
+  .img3 {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 7;
+    z-index: 100;
+  }
+}
+
+@media (max-width: 1000px) {
+  .home-main-box {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .home-text {
+    width: 100%;
+  }
+
+  .grid-box {
+    grid-template-rows: repeat(6, 10vw);
+    width: 80%;
+    margin: 40px auto 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-main-box {
+    text-align: left;
+  }
+
+  .grid-box {
+    grid-template-rows: repeat(6, 14vw);
+    width: 100%;
+  }
 }
 
 @media (min-width: 600px) {
@@ -1454,25 +1533,6 @@ select option {
 }
 
 @media (min-width: 800px) {
-  .home-main-box {
-    flex-direction: row;
-  }
-
-  .grid-box {
-    margin: 0;
-    width: 60%;
-  }
-
-  .home-text {
-    width: 40%;
-    padding-right: 30px;
-  }
-
-  .img1,
-  .img2 {
-    width: 400px;
-  }
-
   .header-container {
     max-width: 85%;
     margin: 0 auto;
